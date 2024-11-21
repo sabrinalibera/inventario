@@ -1,12 +1,14 @@
+// Cargar variables de entorno desde .env
+const dotenv = require('dotenv');
+dotenv.config({path: './env/.env'});
+
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
-
 const flash = require('connect-flash');
 
 const app = express();
-const PORT = 3000;
 
 // Importar rutas
 const authRoutes = require('./routes/auth');
@@ -19,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configurar sesiones
 app.use(session({
-  secret: 'secretKey',   // En la realida haría falta una clave secreta más fuerte
+  secret: process.env.SESSION_SECRET || 'defaultSecretKey', // Usar variable de entorno o una clave por defecto
   resave: false,         // No guardar sesión si no hay cambios
   saveUninitialized: false, // No guardar sesiones vacías
   cookie: { secure: false } // false = sitio no usa HTTPS, de lo contrario true
@@ -43,7 +45,7 @@ app.get('/', (req, res) => {
 app.use('/', authRoutes);
 app.use('/inventory', inventoryRoutes);
 
-// Servidor escuchando
-app.listen(PORT, () => {
-  console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+// Servidor escuchando, PORT es una variable que corresponde a la variable de entorno o a 3000
+app.listen(process.env.PORT, () => {
+  console.log(`Servidor ejecutándose en http://localhost:${process.env.PORT}`);
 });
