@@ -1,9 +1,16 @@
-// Cargar variables de entorno desde .env
+// Si no estamos en entorno de producción, cargar variables de entorno desde .env en entorno de desarrollo
+if (process.env.NODE_ENV != "production" ) {
 const dotenv = require('dotenv');
 dotenv.config({path: './env/.env'});
+}
+
+/* // Cargar variables de entorno desde .env en entorno de desarrollo
+const dotenv = require('dotenv');
+dotenv.config({path: './env/.env'});
+*/
 
 const express = require('express');
-const session = require('express-session');
+const session = require('cookie-session'); //usar 'const session = require('express-session');' en entorno de desarrollo
 const bodyParser = require('body-parser');
 const path = require('path');
 const flash = require('connect-flash');
@@ -21,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configurar sesiones
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'defaultSecretKey', // Usar variable de entorno o una clave por defecto
+  secret: process.env.SESSION_SECRET, // Usar variable de entorno como clave
   resave: false,         // No guardar sesión si no hay cambios
   saveUninitialized: false, // No guardar sesiones vacías
   cookie: { secure: false } // false = sitio no usa HTTPS, de lo contrario true

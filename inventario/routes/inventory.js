@@ -440,7 +440,7 @@ router.post('/users/delete/:id', (req, res) => {
 });
 });
 
-  // Ruta para hacer logout
+  /* //Ruta para cerrar sesión en entorno de desarrollo
 router.get('/logout', (req, res) => {
     // Destruir la sesión
     req.session.destroy((err) => {
@@ -451,5 +451,33 @@ router.get('/logout', (req, res) => {
       res.redirect('/login'); // Redirige al usuario a la página de login
     });
   });
+*/
+
+/* //Ruta para cerrar sesión en producción - version simple
+router.get('/logout', (req, res) => {
+  // Eliminar la sesión establecida con cookie-session
+  req.session = null; // Esto elimina la cookie de sesión
+
+  // Redirigir al usuario a la página de login
+  res.redirect('/login');
+});
+*/
+
+// Ruta para cerrar sesión en producción
+router.get('/logout', (req, res) => {
+  try {
+      // Intentar eliminar la sesión
+      req.session = null; // Esto elimina la cookie de sesión
+
+      // Redirigir al usuario a la página de login
+      res.redirect('/login');
+  } catch (err) {
+      console.error('Error al cerrar sesión:', err);
+
+      // Si hay un error, redirigir a la página de inventario
+      res.redirect('/inventory');
+  }
+});
+
 
 module.exports = router;
