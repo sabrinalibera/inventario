@@ -463,21 +463,6 @@ router.get('/logout', (req, res) => {
 });
 */
 
-// Ruta para cerrar sesión en producción
-router.get('/logout', (req, res) => {
-  try {
-      // Intentar eliminar la sesión
-      req.session = null; // Esto elimina la cookie de sesión
-
-      // Redirigir al usuario a la página de login
-      res.redirect('/login');
-  } catch (err) {
-      console.error('Error al cerrar sesión:', err);
-
-      // Si hay un error, redirigir a la página de inventario
-      res.redirect('/inventory');
-  }
-});
 
 
 module.exports = router;
